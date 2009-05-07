@@ -26,7 +26,7 @@ get '/petition.gif' do
     text = ((json || [])[0] || {})["text"] || "no text"
 
     image = Magick::Image.new(140, 16)
-    image.format = "JPG"
+    image.format = "GIF"
     draw = Magick::Draw.new
     draw.text(5, 12, text)
     draw.draw(image)
