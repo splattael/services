@@ -2,5 +2,5 @@
 require 'app'
 
 disable :run, :reload
-# disable :logging
+disable :logging
 run Sinatra::Application
