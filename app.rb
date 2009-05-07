@@ -16,18 +16,22 @@ def cached(key, expires, &block)
 end
 
 get '/petition.gif' do
-  text = cached(:petition, 5) do
-    json = HTTParty.get("http://twitter.com/statuses/user_timeline/37667542.json?count=1")
-    ((json || [])[0] || {})["text"] || "no text"
-  end
-
-  image = Magick::Image.new(140, 16)
-  image.format = "JPG"
-  draw = Magick::Draw.new
-  draw.text(5, 12, text)
-  draw.draw(image)
+  expires = 5
 
   content_type "image/gif"
-  image.to_blob
+  response['Expires'] = (Time.now + expires * 10).httpdate
+
+  cached(:petition, expires) do
+    json = HTTParty.get("http://twitter.com/statuses/user_timeline/37667542.json?count=1")
+    text = ((json || [])[0] || {})["text"] || "no text"
+
+    image = Magick::Image.new(140, 16)
+    image.format = "JPG"
+    draw = Magick::Draw.new
+    draw.text(5, 12, text)
+    draw.draw(image)
+
+    image.to_blob
+  end
 
 end
