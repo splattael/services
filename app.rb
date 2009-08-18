@@ -33,5 +33,24 @@ get '/petition.gif' do
 
     image.to_blob
   end
+end
 
+get '/scawen.gif' do
+  expires = 5
+  content_type "image/gif"
+  response['Expires'] = (Time.now + expires * 10).httpdate
+
+  cached(:scawen, expires) do
+    document = HTTParty.get("http://www.lfsforum.net/showthread.php?t=9866")
+
+    text = document.to_s[/Posts: \d+,\d+/] || '???'
+
+    image = Magick::Image.new(150, 16)
+    image.format = "GIF"
+    draw = Magick::Draw.new
+    draw.text(5, 12, "Scawen's #{text}")
+    draw.draw(image)
+
+    image.to_blob
+  end
 end
