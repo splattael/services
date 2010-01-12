@@ -48,7 +48,7 @@ get '/nacktscanner.gif' do
     mitzeichner = doc.children[0].to_s.to_i
     max = 50_000
     per_cent = mitzeichner * 100.0 / max
-    text = "%d%% / %d gegen Nacktscanner" % [ per_cent, mitzeichner ]
+    text = "%.2f%% / %d gegen Nacktscanner" % [ per_cent, mitzeichner ]
 
     image = Magick::Image.new(230, 16)
     image.format = "GIF"
